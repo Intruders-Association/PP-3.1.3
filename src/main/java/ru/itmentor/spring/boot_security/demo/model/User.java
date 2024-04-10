@@ -1,56 +1,66 @@
 package ru.itmentor.spring.boot_security.demo.model;
 
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-@Table(name = "users3")
+@Table(name = "users5")
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "surname")
-    private String surname;
-
     @Column(name = "age")
     private int age;
 
     @Column(name = "email")
     private String email;
 
-    @Transient
-    private String passwordConfirm;
-
     private String password;
 
     @ManyToMany
-    @JoinTable(
-            name = "users_roles3",
-            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
-
-    private List<Role> roles = new ArrayList<>();
+    @JoinTable(name = "users_roles5",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roleSet;
 
     public User() {
     }
 
-    public User(Long id, String name, String surname, String email, int age, List<Role> roles) {
+    public User(Long id, String name, int age, String email, String password, Set<Role> roleSet) {
         this.id = id;
         this.name = name;
-        this.surname = surname;
-        this.email = email;
         this.age = age;
-        this.roles = roles;
+        this.email = email;
+        this.password = password;
+        this.roleSet = roleSet;
+    }
+
+    public void setRole(Role role) {
+        if (roleSet == null) {
+            roleSet = new HashSet<>();
+        }
+        roleSet.add(role);
     }
 
     public Long getId() {
@@ -69,28 +79,12 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
     }
 
     public int getAge() {
@@ -101,27 +95,26 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public Set<Role> getRoleSet() {
+        return roleSet;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRoleSet(Set<Role> roleSet) {
+        this.roleSet = roleSet;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+        return getRoleSet();
     }
 
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -131,21 +124,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
