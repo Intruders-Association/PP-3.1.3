@@ -20,7 +20,8 @@ public class RestUserController {
     public RestUserController(UserService userService) {
         this.userService = userService;
     }
-    @GetMapping("/users/{id}")
+
+    @GetMapping("/users")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id.longValue());
         if (user != null) {

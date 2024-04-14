@@ -18,6 +18,10 @@ public class RestAdminController {
     public RestAdminController(UserService userService) {
         this.userService = userService;
     }
+    @GetMapping("users/{id}")
+    public User getUserById(@PathVariable("id") long id){
+        return userService.getUserById(id);
+    }
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getListUsers(){
@@ -25,7 +29,7 @@ public class RestAdminController {
         return ResponseEntity.status(HttpStatus.OK).body(users);}
 
 
-    @PostMapping(value = "/adduser")
+    @PostMapping("/adduser")
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody User user){
         return userService.addUser(user);
