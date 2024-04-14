@@ -24,13 +24,11 @@ public class RestAdminController {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK).body(users);}
 
-    @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        userService.addUser(user);
-        User createdUser = userService.getUserById(user.getId());
-        return createdUser != null
-                ? ResponseEntity.status(HttpStatus.CREATED).body(createdUser)
-                : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
+    @PostMapping(value = "/adduser")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User create(@RequestBody User user){
+        return userService.addUser(user);
     }
 
     @PutMapping("/users/{id}")

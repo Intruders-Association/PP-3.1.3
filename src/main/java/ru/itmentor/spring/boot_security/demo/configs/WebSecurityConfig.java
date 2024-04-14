@@ -50,25 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .httpBasic();
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/admin/").hasRole("ADMIN")
-//                .antMatchers("/user/").hasAnyRole("USER", "ADMIN")
-//                .antMatchers("/", "/index").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .successHandler(successUserHandler)
-//                .permitAll()
-//                .and()
-//                .httpBasic()
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .clearAuthentication(true)
-//                .invalidateHttpSession(true)
-//                .logoutSuccessUrl("/login")
-//                .permitAll();
+
     }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {auth.authenticationProvider(customUserDetailsService);}
