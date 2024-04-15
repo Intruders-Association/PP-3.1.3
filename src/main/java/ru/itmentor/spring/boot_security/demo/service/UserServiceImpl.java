@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(Long id, User user) {
+    public User updateUser(Long id, User user) {
         User updatedUser = userRepository.getById(id);
         if (updatedUser != null) {
             updatedUser.setName(user.getUsername());
@@ -43,8 +43,7 @@ public class UserServiceImpl implements UserService {
             updatedUser.setRoleSet(user.getRoleSet());
             userRepository.save(updatedUser);
         }
-    }
-
+        return   userRepository.saveAndFlush(user);    }
     @Override
     @Transactional
     public void deleteUser(Long id) {
