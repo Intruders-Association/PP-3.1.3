@@ -32,16 +32,14 @@ public class RestAdminController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody User user, @PathVariable("id") Long id) {
-        user.setId(id);
-        userService.updateUser(id.longValue(), user);
-        return ResponseEntity.ok().build();
+    @ResponseStatus(HttpStatus.OK)
+    public User update(@PathVariable("id") Long id, @RequestBody User user){
+        return userService.updateUser(id,user);
     }
-
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<List<User>> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id.longValue());
-        return ResponseEntity.status(HttpStatus.OK).build();        
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
